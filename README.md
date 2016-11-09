@@ -11,3 +11,4 @@
 * A couple of things that tripped me up
 	* Make sure qmake is referenced in the `PATH` variable
 	* Make sure the location of MySQL on your machine matches the location they specified in the command i.e. `/usr/local/include`. (Homebrew install location is usually `/usr/local/Cellar/mysql/<version>...`)
+* We'll have to figure out a better way to store db credentials. For now you'll have to edit `herocontroller.cpp` to put in your db user, host and password.
