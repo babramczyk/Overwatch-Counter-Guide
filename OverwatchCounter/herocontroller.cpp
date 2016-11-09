@@ -1,6 +1,7 @@
 #include "herocontroller.h"
 #include <QtSql>
 #include <QtSqlVersion>
+#include <vector>
 
 HeroController::HeroController() {
     fetchHeroes(heroes);
@@ -11,8 +12,8 @@ void HeroController::fetchHeroes(std::vector<Hero> &heroCol) {
     QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
     db.setHostName("127.0.0.1");
     db.setDatabaseName("overwatch_counter_guide");
-    db.setUserName("rwollack");
-    db.setPassword("abc123");
+    db.setUserName("root");
+    db.setPassword("Bb240824");
     bool dbOpen = db.open();
 
     if(dbOpen) {
@@ -30,7 +31,7 @@ void HeroController::fetchHeroes(std::vector<Hero> &heroCol) {
         qDebug() << "NO HEROES!!!";
     }
 
-    qDebug() << "Total Heros: " << heroCol.size();
+    qDebug() << "Total Heroes: " << heroCol.size();
 }
 
 //getter for hero list

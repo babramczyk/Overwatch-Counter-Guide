@@ -1,6 +1,7 @@
 #ifndef HEROCONTROLLER_H
 #define HEROCONTROLLER_H
 
+#include <vector>
 #include "hero.h"
 
 class HeroController
