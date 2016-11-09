@@ -70,7 +70,7 @@ void MainWindow::on_findCountersBtn_clicked()
     ui->counterResultLabel->hide();
     ui->resultTableWidget->show();
     ui->resultTableWidget->setRowCount(counters.size());
-    ui->resultTableWidget->setColumnCount(2);
+    ui->resultTableWidget->setColumnCount(3);
     ui->resultTableWidget->setColumnWidth(0, 100);
 
     for(std::vector<Hero>::iterator it = counters.begin(); it < counters.end(); ++it) {
@@ -82,7 +82,7 @@ void MainWindow::on_findCountersBtn_clicked()
         ui->resultTableWidget->setRowHeight(counter, 50);
         ui->resultTableWidget->setItem(counter, 0, item);
         ui->resultTableWidget->setItem(counter, 1, new QTableWidgetItem(it->getName()));
-        ui->resultTableWidget->setItem(counter, 2, new QTableWidgetItem(QString::number(10))); //hard coded for now...
+        ui->resultTableWidget->setItem(counter, 2, new QTableWidgetItem(QString::number(counter + 10))); //hard coded for now...
 
         counter++;
     }
