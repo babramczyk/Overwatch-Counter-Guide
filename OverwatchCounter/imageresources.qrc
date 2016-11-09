@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/ana.png</file>
+        <file>icons/bastion.png</file>
+        <file>icons/d.va.png</file>
+        <file>icons/genji.png</file>
+        <file>icons/hanzo.png</file>
+        <file>icons/junkrat.png</file>
+    </qresource>
+</RCC>
