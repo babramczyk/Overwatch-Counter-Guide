@@ -6,7 +6,7 @@
 class Hero
 {
 private:
-    int id;
+    int id, score;
     QString name;
 public:
     Hero();
@@ -15,6 +15,8 @@ public:
     void setName(QString name);
     int getId();
     void setId(int id);
+    int getScore();
+    void calculateScore(std::vector<int> enemyIDs);
 };
 
 #endif // HERO_H

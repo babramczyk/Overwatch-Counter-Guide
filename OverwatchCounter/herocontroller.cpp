@@ -13,7 +13,7 @@ void HeroController::fetchHeroes(std::vector<Hero> &heroCol) {
     db.setHostName("127.0.0.1");
     db.setDatabaseName("overwatch_counter_guide");
     db.setUserName("root");
-    db.setPassword("Bb240824");
+    db.setPassword("");
     bool dbOpen = db.open();
 
     if(dbOpen) {
@@ -25,13 +25,10 @@ void HeroController::fetchHeroes(std::vector<Hero> &heroCol) {
             QString name = qGetHeroes.value(1).toString();
             Hero hero(id, name);
             heroCol.push_back(hero);
-            qDebug() << "ID: " << hero.getId() << " Name: " << hero.getName();
         }
     } else {
-        qDebug() << "NO HEROES!!!";
+        qDebug() << "Database failed to open.";
     }
-
-    qDebug() << "Total Heroes: " << heroCol.size();
 }
 
 //getter for hero list
@@ -56,14 +53,71 @@ void HeroController::getHeroById(int id, Hero &h) {
     }
 }
 
-//get a list of counters
-void HeroController::getCounters(std::vector<Hero> &hs) {
-    //my thought here was to run a query and then poulate the return vector with hero
-    //objects retrieved from the original vector of heros using id's returned from the db
-    //maybe not the best way to do it...
-    Hero h;
-    for(int i = 1; i < 10; i++) {
-        getHeroById(i, h);
-        hs.push_back(h);
+/**
+ * @brief Iterates over all heroes, and updates their 'score' field based on
+ *        the current selected team.
+ */
+void HeroController::calculateAllHeroScores() {
+    std::vector<int> enemyIDs;
+    for (auto it = enemies.begin(); it != enemies.end(); ++it) {
+        enemyIDs.push_back(it->getId());
+    }
+    for (auto it = heroes.begin(); it != heroes.end(); ++it) {
+        it->calculateScore(enemyIDs);
+    }
+}
+
+/**
+ * @brief Will return a vector of heroes with newly populated fields for their
+ *        scores with respect to the currently selected team. Only populates
+ *        heroes with non-zero scores.
+ *
+ * @param heroesWithScores The vector to populate.
+ */
+void HeroController::getHeroScores(std::vector<Hero> &heroesWithScores) {
+    calculateAllHeroScores();
+    for (auto it = heroes.begin();
+         it != heroes.end(); ++it) {
+        if (it->getScore() != 0) {
+            heroesWithScores.push_back(*it);
+        }
+    }
+}
+void HeroController::addEnemy(Hero enemy) {
+    enemies.push_back(enemy);
+}
+
+void HeroController::getHeroByName(std::string name, Hero &h) {
+    auto it = std::find_if(heroes.begin(),
+                           heroes.end(),
+                           [name](Hero &h) {
+                               return h.getName().toStdString() == name;
+                           });
+
+    if (it != heroes.end()) {
+        h = *it;
+    }
+}
+
+void HeroController::clearEnemies() {
+    enemies.clear();
+}
+
+void HeroController::removeEnemy(Hero removeEnemy) {
+    auto it = enemies.begin();
+    for (; it != enemies.end(); ++it) {
+        if (it->getId() == removeEnemy.getId()) {
+            break;
+        }
+    }
+    if (it != enemies.end()) {
+        enemies.erase(it);
+    }
+}
+
+void HeroController::printEnemies() {
+    for (auto it = enemies.begin();
+         it != enemies.end(); ++it) {
+        qDebug() << it->getName() << ": " << it->getId();
     }
 }

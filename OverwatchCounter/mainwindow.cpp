@@ -19,8 +19,8 @@ MainWindow::MainWindow(QWidget *parent) :
     hc = new HeroController();
 
     //populate list of all heroes
-    std::vector<Hero>* heros = hc->getHeroes();
-    for(std::vector<Hero>::iterator it = heros->begin(); it < heros->end(); ++it) {
+    std::vector<Hero>* heroes = hc->getHeroes();
+    for(std::vector<Hero>::iterator it = heroes->begin(); it < heroes->end(); ++it) {
         QListWidgetItem* item = new QListWidgetItem(QIcon(":/icons/" + QString::number(it->getId()) + ".png"), it->getName());
         item->setTextColor(Qt::white);
         ui->heroList->addItem(item);
@@ -41,8 +41,11 @@ void MainWindow::on_addHeroBtn_clicked()
     }
 
     QListWidgetItem* currentHero = ui->heroList->currentItem();
+    Hero newEnemy;
+    hc->getHeroByName(currentHero->text().toStdString(), newEnemy);
+    hc->addEnemy(newEnemy);
 
-    ui->heroList->removeItemWidget(currentHero);
+    ui->heroList->removeItemWidget(currentHero); // Currently doesn't work (?)
     ui->currentTeam->addItem(new QListWidgetItem(currentHero->icon(), currentHero->text()));
 
     if(ui->currentTeam->count() > 0) {
@@ -53,7 +56,12 @@ void MainWindow::on_addHeroBtn_clicked()
 //remove button click event - removes a hero from the current team list
 void MainWindow::on_removeHeroBtn_clicked()
 {
-    delete ui->currentTeam->currentItem();
+    QListWidgetItem* currentHero = ui->currentTeam->currentItem();
+    Hero removeEnemy;
+    hc->getHeroByName(currentHero->text().toStdString(), removeEnemy);
+    hc->removeEnemy(removeEnemy);
+    hc->printEnemies();
+    delete currentHero;
 
     if(ui->currentTeam->count() == 0) {
         ui->emptyTeamLabel->show();
@@ -64,8 +72,10 @@ void MainWindow::on_removeHeroBtn_clicked()
 void MainWindow::on_findCountersBtn_clicked()
 {
     std::vector<Hero> counters;
-    hc->getCounters(counters);
+    hc->getHeroScores(counters);
     int counter = 0;
+
+    hc->printEnemies();
 
     ui->counterResultLabel->hide();
     ui->resultTableWidget->show();
@@ -82,7 +92,7 @@ void MainWindow::on_findCountersBtn_clicked()
         ui->resultTableWidget->setRowHeight(counter, 50);
         ui->resultTableWidget->setItem(counter, 0, item);
         ui->resultTableWidget->setItem(counter, 1, new QTableWidgetItem(it->getName()));
-        ui->resultTableWidget->setItem(counter, 2, new QTableWidgetItem(QString::number(counter + 10))); //hard coded for now...
+        ui->resultTableWidget->setItem(counter, 2, new QTableWidgetItem(QString::number(it->getScore())));
 
         counter++;
     }
@@ -91,6 +101,9 @@ void MainWindow::on_findCountersBtn_clicked()
 //clear button click event - clears the result list
 void MainWindow::on_clearResultsBtn_clicked()
 {
+    qDebug() << "Clear";
     ui->resultTableWidget->clear();
     ui->counterResultLabel->show();
+    hc->clearEnemies();
 }
+
