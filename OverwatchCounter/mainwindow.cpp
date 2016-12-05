@@ -75,8 +75,6 @@ void MainWindow::on_findCountersBtn_clicked()
     hc->getHeroScores(counters);
     int counter = 0;
 
-    hc->printEnemies();
-
     ui->counterResultLabel->hide();
     ui->resultTableWidget->show();
     ui->resultTableWidget->setRowCount(counters.size());
@@ -86,13 +84,20 @@ void MainWindow::on_findCountersBtn_clicked()
     for(std::vector<Hero>::iterator it = counters.begin(); it < counters.end(); ++it) {
         QTableWidgetItem* item = new QTableWidgetItem();
         QIcon icon(":/icons/" + QString::number(it->getId()) + ".png");
+        int score = it->getScore();
+        QString scoreStr;
+        if (score > 1) {
+            scoreStr = "+" + QString::number(score);
+        } else {
+            scoreStr = QString::number(score); // Negative sign already present
+        }
 
         item->setIcon(icon);
 
         ui->resultTableWidget->setRowHeight(counter, 50);
         ui->resultTableWidget->setItem(counter, 0, item);
         ui->resultTableWidget->setItem(counter, 1, new QTableWidgetItem(it->getName()));
-        ui->resultTableWidget->setItem(counter, 2, new QTableWidgetItem(QString::number(it->getScore())));
+        ui->resultTableWidget->setItem(counter, 2, new QTableWidgetItem(scoreStr));
 
         counter++;
     }

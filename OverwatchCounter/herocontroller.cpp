@@ -83,6 +83,7 @@ void HeroController::getHeroScores(std::vector<Hero> &heroesWithScores) {
         }
     }
 }
+
 void HeroController::addEnemy(Hero enemy) {
     enemies.push_back(enemy);
 }
