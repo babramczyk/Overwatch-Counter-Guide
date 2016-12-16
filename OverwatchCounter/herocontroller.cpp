@@ -82,6 +82,9 @@ void HeroController::getHeroScores(std::vector<Hero> &heroesWithScores) {
             heroesWithScores.push_back(*it);
         }
     }
+    std::sort(heroesWithScores.begin(), heroesWithScores.end(), [](Hero &a, Hero&b) {
+        return b.getScore() < a.getScore();
+    });
 }
 
 void HeroController::addEnemy(Hero enemy) {

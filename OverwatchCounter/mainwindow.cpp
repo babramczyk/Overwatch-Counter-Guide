@@ -5,6 +5,27 @@
 #include <QApplication>
 #include <QDebug>
 
+QColor *gc = new QColor(0, 255, 0);
+QColor *rc = new QColor(255, 0, 0);
+QBrush *green = new QBrush(*gc);
+QBrush *red = new QBrush(*rc);
+
+QTableWidgetItem* generateColoredScoreCell(int score) {
+    QString scoreStr;
+    if (score > 0) {
+        scoreStr = "+" + QString::number(score);
+    } else {
+        scoreStr = QString::number(score); // Negative sign already present
+    }
+    QTableWidgetItem* scoreCell = new QTableWidgetItem(scoreStr);
+    if (score > 0) {
+        scoreCell->setForeground(*green);
+    } else if (score < 0) {
+        scoreCell->setForeground(*red);
+    }
+    return scoreCell;
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -84,23 +105,18 @@ void MainWindow::on_findCountersBtn_clicked()
     for(std::vector<Hero>::iterator it = counters.begin(); it < counters.end(); ++it) {
         QTableWidgetItem* item = new QTableWidgetItem();
         QIcon icon(":/icons/" + QString::number(it->getId()) + ".png");
-        int score = it->getScore();
-        QString scoreStr;
-        if (score > 1) {
-            scoreStr = "+" + QString::number(score);
-        } else {
-            scoreStr = QString::number(score); // Negative sign already present
-        }
-
         item->setIcon(icon);
+        int score = it->getScore();
 
         ui->resultTableWidget->setRowHeight(counter, 50);
         ui->resultTableWidget->setItem(counter, 0, item);
         ui->resultTableWidget->setItem(counter, 1, new QTableWidgetItem(it->getName()));
-        ui->resultTableWidget->setItem(counter, 2, new QTableWidgetItem(scoreStr));
+        QTableWidgetItem* scoreCell = generateColoredScoreCell(score);
+        ui->resultTableWidget->setItem(counter, 2, scoreCell);
 
         counter++;
     }
+
 }
 
 //clear button click event - clears the result list
