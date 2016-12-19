@@ -22,6 +22,9 @@
 }</string>
   </property>
   <widget class="QWidget" name="centralWidget">
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
    <widget class="QListWidget" name="heroList">
     <property name="geometry">
      <rect>
@@ -208,6 +211,9 @@ QListWidget::item:selected {
       <family>Avenir Next</family>
       <pointsize>14</pointsize>
      </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
     <property name="styleSheet">
      <string notr="true">QTableWidget {

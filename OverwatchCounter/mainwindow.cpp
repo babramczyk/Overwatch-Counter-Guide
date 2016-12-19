@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //set up ui stuff
     ui->setupUi(this);
     qApp->installEventFilter(this);
+    ui->centralWidget->setFocusPolicy(Qt::NoFocus);
     ui->heroList->setIconSize(QSize(50, 50));
     ui->currentTeam->setIconSize(QSize(75, 75));
     ui->resultTableWidget->setIconSize(QSize(50, 50));
@@ -70,6 +71,43 @@ void MainWindow::on_removeHeroBtn_clicked()
 //gets list of counters and populates the results table view
 void MainWindow::on_findCountersBtn_clicked()
 {
+    populateCounters();
+}
+
+//clear button click event - clears the result list
+void MainWindow::on_clearResultsBtn_clicked(){
+    reset();
+}
+
+void MainWindow::addCurrentHero() {
+    if (ui->currentTeam->count() == TEAM_SIZE) {
+        return;
+    }
+
+    QListWidgetItem* currentHero = ui->heroList->currentItem();
+    Hero newEnemy;
+    hc->getHeroByName(currentHero->text().toStdString(), newEnemy);
+    hc->addEnemy(newEnemy);
+
+    ui->heroList->removeItemWidget(currentHero); // Currently doesn't work (?)
+    ui->currentTeam->addItem(new QListWidgetItem(currentHero->icon(), currentHero->text()));
+
+    populateCounters();
+}
+
+void MainWindow::removeCurrentHero() {
+    QListWidgetItem* currentHero = ui->currentTeam->currentItem();
+    if (currentHero == NULL) return;
+
+    Hero removeEnemy;
+    hc->getHeroByName(currentHero->text().toStdString(), removeEnemy);
+    hc->removeEnemy(removeEnemy);
+    delete currentHero;
+
+    populateCounters();
+}
+
+void MainWindow::populateCounters()  {
     std::vector<Hero> counters;
     hc->getHeroScores(counters);
     int counter = 0;
@@ -91,60 +129,34 @@ void MainWindow::on_findCountersBtn_clicked()
         ui->resultTableWidget->setItem(counter, 1, new QTableWidgetItem(it->getName()));
         QTableWidgetItem* scoreCell = generateColoredScoreCell(score);
         ui->resultTableWidget->setItem(counter, 2, scoreCell);
+        ui->resultTableWidget->setFocusPolicy(Qt::NoFocus);
 
         counter++;
     }
 
-}
-
-//clear button click event - clears the result list
-void MainWindow::on_clearResultsBtn_clicked()
-{
-    ui->resultTableWidget->clear();
-    ui->counterResultLabel->show();
-    hc->clearEnemies();
-}
-
-void MainWindow::addCurrentHero() {
-    if (ui->currentTeam->count() == TEAM_SIZE) {
-        return;
+    if (ui->currentTeam->count() == 0) {
+        ui->emptyTeamLabel->show();
     }
-
-    QListWidgetItem* currentHero = ui->heroList->currentItem();
-    Hero newEnemy;
-    hc->getHeroByName(currentHero->text().toStdString(), newEnemy);
-    hc->addEnemy(newEnemy);
-
-    ui->heroList->removeItemWidget(currentHero); // Currently doesn't work (?)
-    ui->currentTeam->addItem(new QListWidgetItem(currentHero->icon(), currentHero->text()));
-
-    if(ui->currentTeam->count() > 0) {
+    if (ui->currentTeam->count() > 0) {
         ui->emptyTeamLabel->hide();
     }
 }
 
-void MainWindow::removeCurrentHero() {
-    QListWidgetItem* currentHero = ui->currentTeam->currentItem();
-    if (currentHero == NULL) return;
-
-    Hero removeEnemy;
-    hc->getHeroByName(currentHero->text().toStdString(), removeEnemy);
-    hc->removeEnemy(removeEnemy);
-    delete currentHero;
-
-    if(ui->currentTeam->count() == 0) {
-        ui->emptyTeamLabel->show();
-    }
+void MainWindow::reset() {
+    ui->currentTeam->clear();
+    ui->resultTableWidget->clear();
+    ui->counterResultLabel->show();
+    ui->heroList->setFocus();
+    hc->clearEnemies();
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+//        qDebug() << keyEvent->key();
+        qDebug() << obj;
         if (obj == ui->heroList) {
-//            qDebug() << keyEvent->key();
-//            qDebug() << (keyEvent->key() == Qt::Key_Backspace);x`
-            // Delete: Delete, Backspace
             if (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return
                     || keyEvent->key() == Qt::Key_Control) {
                 addCurrentHero();
@@ -154,7 +166,12 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         } else if (obj == ui->currentTeam) {
             if (keyEvent->key() == Qt::Key_Delete || keyEvent->key() == Qt::Key_Backspace) {
                 removeCurrentHero();
+            } else if (keyEvent->key() == Qt::Key_Tab) {
+                ui->currentTeam->setFocus();
             }
+        }
+        if (keyEvent->key() == Qt::Key_Escape) {
+            reset();
         }
     }
     return QObject::eventFilter(obj, event);

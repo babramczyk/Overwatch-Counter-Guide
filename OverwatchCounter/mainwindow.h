@@ -27,8 +27,10 @@ private slots:
     void removeCurrentHero();
 
     void on_findCountersBtn_clicked();
+    void populateCounters();
 
     void on_clearResultsBtn_clicked();
+    void reset();
 
 private:
     Ui::MainWindow *ui;
