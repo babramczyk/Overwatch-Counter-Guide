@@ -33,7 +33,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //set up ui stuff
     ui->setupUi(this);
     qApp->installEventFilter(this);
-    ui->centralWidget->setFocusPolicy(Qt::NoFocus);
     ui->heroList->setIconSize(QSize(50, 50));
     ui->currentTeam->setIconSize(QSize(75, 75));
     ui->resultTableWidget->setIconSize(QSize(50, 50));
@@ -155,7 +154,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 //        qDebug() << keyEvent->key();
-        qDebug() << obj;
+//        qDebug() << obj;
         if (obj == ui->heroList) {
             if (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return
                     || keyEvent->key() == Qt::Key_Control) {
