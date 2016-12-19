@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     //set up ui stuff
     ui->setupUi(this);
+    qApp->installEventFilter(this);
     ui->heroList->setIconSize(QSize(50, 50));
     ui->currentTeam->setIconSize(QSize(75, 75));
     ui->resultTableWidget->setIconSize(QSize(50, 50));
@@ -57,36 +58,13 @@ MainWindow::~MainWindow()
 //add button click event - adds a hero to the current team list
 void MainWindow::on_addHeroBtn_clicked()
 {
-    if(ui->currentTeam->count() == TEAM_SIZE) {
-        return;
-    }
-
-    QListWidgetItem* currentHero = ui->heroList->currentItem();
-    Hero newEnemy;
-    hc->getHeroByName(currentHero->text().toStdString(), newEnemy);
-    hc->addEnemy(newEnemy);
-
-    ui->heroList->removeItemWidget(currentHero); // Currently doesn't work (?)
-    ui->currentTeam->addItem(new QListWidgetItem(currentHero->icon(), currentHero->text()));
-
-    if(ui->currentTeam->count() > 0) {
-        ui->emptyTeamLabel->hide();
-    }
+    addCurrentHero();
 }
 
 //remove button click event - removes a hero from the current team list
 void MainWindow::on_removeHeroBtn_clicked()
 {
-    QListWidgetItem* currentHero = ui->currentTeam->currentItem();
-    Hero removeEnemy;
-    hc->getHeroByName(currentHero->text().toStdString(), removeEnemy);
-    hc->removeEnemy(removeEnemy);
-    hc->printEnemies();
-    delete currentHero;
-
-    if(ui->currentTeam->count() == 0) {
-        ui->emptyTeamLabel->show();
-    }
+    removeCurrentHero();
 }
 
 //gets list of counters and populates the results table view
@@ -122,9 +100,62 @@ void MainWindow::on_findCountersBtn_clicked()
 //clear button click event - clears the result list
 void MainWindow::on_clearResultsBtn_clicked()
 {
-    qDebug() << "Clear";
     ui->resultTableWidget->clear();
     ui->counterResultLabel->show();
     hc->clearEnemies();
 }
 
+void MainWindow::addCurrentHero() {
+    if (ui->currentTeam->count() == TEAM_SIZE) {
+        return;
+    }
+
+    QListWidgetItem* currentHero = ui->heroList->currentItem();
+    Hero newEnemy;
+    hc->getHeroByName(currentHero->text().toStdString(), newEnemy);
+    hc->addEnemy(newEnemy);
+
+    ui->heroList->removeItemWidget(currentHero); // Currently doesn't work (?)
+    ui->currentTeam->addItem(new QListWidgetItem(currentHero->icon(), currentHero->text()));
+
+    if(ui->currentTeam->count() > 0) {
+        ui->emptyTeamLabel->hide();
+    }
+}
+
+void MainWindow::removeCurrentHero() {
+    QListWidgetItem* currentHero = ui->currentTeam->currentItem();
+    if (currentHero == NULL) return;
+
+    Hero removeEnemy;
+    hc->getHeroByName(currentHero->text().toStdString(), removeEnemy);
+    hc->removeEnemy(removeEnemy);
+    delete currentHero;
+
+    if(ui->currentTeam->count() == 0) {
+        ui->emptyTeamLabel->show();
+    }
+}
+
+bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+        if (obj == ui->heroList) {
+//            qDebug() << keyEvent->key();
+//            qDebug() << (keyEvent->key() == Qt::Key_Backspace);x`
+            // Delete: Delete, Backspace
+            if (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return
+                    || keyEvent->key() == Qt::Key_Control) {
+                addCurrentHero();
+            } else if (keyEvent->key() == Qt::Key_Delete || keyEvent->key() == Qt::Key_Backspace) {
+
+            }
+        } else if (obj == ui->currentTeam) {
+            if (keyEvent->key() == Qt::Key_Delete || keyEvent->key() == Qt::Key_Backspace) {
+                removeCurrentHero();
+            }
+        }
+    }
+    return QObject::eventFilter(obj, event);
+}

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QKeyEvent>
 #include "herocontroller.h"
 
 const int TEAM_SIZE = 6;
@@ -20,8 +21,10 @@ public:
 
 private slots:
     void on_addHeroBtn_clicked();
+    void addCurrentHero();
 
     void on_removeHeroBtn_clicked();
+    void removeCurrentHero();
 
     void on_findCountersBtn_clicked();
 
@@ -30,6 +33,9 @@ private slots:
 private:
     Ui::MainWindow *ui;
     HeroController *hc;
+
+protected:
+    bool eventFilter(QObject *obj, QEvent *event);
 };
 
 #endif // MAINWINDOW_H
