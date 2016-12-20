@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>965</width>
-    <height>735</height>
+    <width>991</width>
+    <height>719</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Overwatch Counter Guide</string>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
@@ -36,7 +36,7 @@
     </property>
     <property name="font">
      <font>
-      <family>Avenir Next</family>
+      <family>Helvetica</family>
       <pointsize>16</pointsize>
      </font>
     </property>
@@ -69,18 +69,18 @@ QListWidget::item:selected {
     <property name="geometry">
      <rect>
       <x>130</x>
-      <y>590</y>
-      <width>141</width>
-      <height>71</height>
+      <y>580</y>
+      <width>151</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Avenir Next</family>
+      <family>Helvetica</family>
      </font>
     </property>
     <property name="text">
-     <string>Add Selected</string>
+     <string>Add Hero</string>
     </property>
     <property name="checkable">
      <bool>false</bool>
@@ -113,6 +113,11 @@ QListWidget::item:selected {
       <verstretch>0</verstretch>
      </sizepolicy>
     </property>
+    <property name="font">
+     <font>
+      <family>Helvetica</family>
+     </font>
+    </property>
     <property name="autoFillBackground">
      <bool>false</bool>
     </property>
@@ -143,7 +148,7 @@ QListWidget::item:selected {
     </property>
     <property name="font">
      <font>
-      <family>Avenir Next</family>
+      <family>Helvetica</family>
       <pointsize>14</pointsize>
      </font>
     </property>
@@ -151,7 +156,7 @@ QListWidget::item:selected {
      <string notr="true">color: white;</string>
     </property>
     <property name="text">
-     <string>Choose Your Enemies</string>
+     <string>Assemble Enemy Team</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -165,7 +170,7 @@ QListWidget::item:selected {
     </property>
     <property name="font">
      <font>
-      <family>Avenir Next</family>
+      <family>Helvetica</family>
       <pointsize>14</pointsize>
      </font>
     </property>
@@ -179,7 +184,7 @@ QListWidget::item:selected {
    <widget class="QPushButton" name="removeHeroBtn">
     <property name="geometry">
      <rect>
-      <x>390</x>
+      <x>490</x>
       <y>160</y>
       <width>141</width>
       <height>71</height>
@@ -187,11 +192,11 @@ QListWidget::item:selected {
     </property>
     <property name="font">
      <font>
-      <family>Avenir Next</family>
+      <family>Helvetica</family>
      </font>
     </property>
     <property name="text">
-     <string>Remove Selected</string>
+     <string>Delete</string>
     </property>
    </widget>
    <widget class="QTableWidget" name="resultTableWidget">
@@ -200,15 +205,15 @@ QListWidget::item:selected {
     </property>
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>270</y>
-      <width>391</width>
-      <height>301</height>
+      <x>380</x>
+      <y>230</y>
+      <width>541</width>
+      <height>401</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Avenir Next</family>
+      <family>Helvetica</family>
       <pointsize>14</pointsize>
      </font>
     </property>
@@ -249,7 +254,7 @@ QListWidget::item:selected {
     </property>
     <property name="font">
      <font>
-      <family>Avenir Next</family>
+      <family>Helvetica</family>
       <pointsize>24</pointsize>
      </font>
     </property>
@@ -260,28 +265,10 @@ QListWidget::item:selected {
      <string>Build the enemy team</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="findCountersBtn">
-    <property name="geometry">
-     <rect>
-      <x>580</x>
-      <y>160</y>
-      <width>141</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Avenir Next</family>
-     </font>
-    </property>
-    <property name="text">
-     <string>Find Counters</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="clearResultsBtn">
     <property name="geometry">
      <rect>
-      <x>770</x>
+      <x>650</x>
       <y>160</y>
       <width>141</width>
       <height>71</height>
@@ -289,25 +276,25 @@ QListWidget::item:selected {
     </property>
     <property name="font">
      <font>
-      <family>Avenir Next</family>
+      <family>Helvetica</family>
      </font>
     </property>
     <property name="text">
-     <string>Clear Results</string>
+     <string>Reset Enemies</string>
     </property>
    </widget>
    <widget class="QLabel" name="counterResultLabel">
     <property name="geometry">
      <rect>
-      <x>620</x>
-      <y>390</y>
+      <x>610</x>
+      <y>410</y>
       <width>81</width>
       <height>51</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Avenir Next</family>
+      <family>Helvetica</family>
       <pointsize>24</pointsize>
      </font>
     </property>
@@ -318,35 +305,13 @@ QListWidget::item:selected {
      <string>Results</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>590</x>
-      <y>250</y>
-      <width>151</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Avenir Next</family>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color: white;</string>
-    </property>
-    <property name="text">
-     <string>Best Counter Matches</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>965</width>
+     <width>991</width>
      <height>22</height>
     </rect>
    </property>

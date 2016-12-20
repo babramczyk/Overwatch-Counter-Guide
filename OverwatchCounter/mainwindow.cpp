@@ -19,9 +19,9 @@ QTableWidgetItem* generateColoredScoreCell(int score) {
     }
     QTableWidgetItem* scoreCell = new QTableWidgetItem(scoreStr);
     if (score > 0) {
-        scoreCell->setForeground(*green);
+        scoreCell->setForeground(Qt::green);
     } else if (score < 0) {
-        scoreCell->setForeground(*red);
+        scoreCell->setForeground(Qt::red);
     }
     return scoreCell;
 }
@@ -45,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
     for(std::vector<Hero>::iterator it = heroes->begin(); it < heroes->end(); ++it) {
         QListWidgetItem* item = new QListWidgetItem(QIcon(":/icons/" + QString::number(it->getId()) + ".png"), it->getName());
         item->setTextColor(Qt::white);
+
         ui->heroList->addItem(item);
     }
 
@@ -65,12 +66,6 @@ void MainWindow::on_addHeroBtn_clicked()
 void MainWindow::on_removeHeroBtn_clicked()
 {
     removeCurrentHero();
-}
-
-//gets list of counters and populates the results table view
-void MainWindow::on_findCountersBtn_clicked()
-{
-    populateCounters();
 }
 
 //clear button click event - clears the result list
@@ -153,8 +148,6 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
-//        qDebug() << keyEvent->key();
-//        qDebug() << obj;
         if (obj == ui->heroList) {
             if (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return
                     || keyEvent->key() == Qt::Key_Control) {

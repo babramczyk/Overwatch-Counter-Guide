@@ -22,7 +22,8 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     hero.h \
-    herocontroller.h
+    herocontroller.h \
+    herolistitem.h
 
 FORMS    += mainwindow.ui
 

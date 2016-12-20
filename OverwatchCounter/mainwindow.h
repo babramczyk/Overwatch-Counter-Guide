@@ -26,7 +26,6 @@ private slots:
     void on_removeHeroBtn_clicked();
     void removeCurrentHero();
 
-    void on_findCountersBtn_clicked();
     void populateCounters();
 
     void on_clearResultsBtn_clicked();
