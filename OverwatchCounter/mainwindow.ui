@@ -58,6 +58,9 @@ QListWidget::item:selected {
 	color: black;
 }</string>
     </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::ExtendedSelection</enum>
+    </property>
     <property name="verticalScrollMode">
      <enum>QAbstractItemView::ScrollPerPixel</enum>
     </property>
@@ -135,6 +138,9 @@ QListWidget::item:selected {
 	background-color: rgba(255, 255, 255, .4);
 	color: black;
 }</string>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::ExtendedSelection</enum>
     </property>
    </widget>
    <widget class="QLabel" name="label">

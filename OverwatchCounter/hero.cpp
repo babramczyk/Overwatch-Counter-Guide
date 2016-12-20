@@ -6,9 +6,10 @@
 
 Hero::Hero() {}
 
-Hero::Hero(int id, QString name) {
+Hero::Hero(int id, QString name, Role role) {
     Hero::id = id;
     Hero::name = name;
+    Hero::role = role;
     score = 0;
 }
 
@@ -55,4 +56,12 @@ void Hero::calculateScore(std::vector<int> enemyIDs) {
         int currID = qCalcScore.value(1).value<int>();
         score -= std::count(enemyIDs.begin(), enemyIDs.end(), currID);
     }
+}
+
+Role Hero::getRole() {
+    return role;
+}
+
+void Hero::setRole(Role role) {
+    this->role = role;
 }

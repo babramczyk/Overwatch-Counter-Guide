@@ -4,14 +4,18 @@
 #include <vector>
 #include <string>
 #include "hero.h"
+#include "role.h"
 
 class HeroController
 {
 private:
     std::vector<Hero> heroes;
     std::vector<Hero> enemies;
+    std::vector<Role> roles;
+    bool dbConnected;
 public:
     HeroController();
+    void connectDB();
     void fetchHeroes(std::vector<Hero> &heroCol);
     Hero* getHero(int id);
     std::vector<Hero>* getHeroes();
@@ -23,6 +27,8 @@ public:
     void removeEnemy(Hero removeEnemy);
     void clearEnemies();
     void printEnemies();
+    void fetchRoles(std::vector<Role> &roles);
+    void getRoleById(int id, Role &r);
 };
 
 #endif // HEROCONTROLLER_H

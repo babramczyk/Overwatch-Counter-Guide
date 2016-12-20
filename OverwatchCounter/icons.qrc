@@ -24,5 +24,9 @@
         <file>icons/9.png</file>
         <file>icons/icons.qrc</file>
         <file>icons/bg.jpg</file>
+        <file>icons/attack.png</file>
+        <file>icons/defense.png</file>
+        <file>icons/support.png</file>
+        <file>icons/tank.png</file>
     </qresource>
 </RCC>

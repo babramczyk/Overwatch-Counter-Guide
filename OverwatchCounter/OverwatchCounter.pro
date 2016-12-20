@@ -18,12 +18,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     hero.cpp \
-    herocontroller.cpp
+    herocontroller.cpp \
+    role.cpp
 
 HEADERS  += mainwindow.h \
     hero.h \
     herocontroller.h \
-    herolistitem.h
+    herolistitem.h \
+    role.h
 
 FORMS    += mainwindow.ui
 

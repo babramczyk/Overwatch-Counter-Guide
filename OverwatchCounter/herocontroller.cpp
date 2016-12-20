@@ -4,30 +4,56 @@
 #include <vector>
 
 HeroController::HeroController() {
+    connectDB();
+    fetchRoles(roles);
     fetchHeroes(heroes);
+}
+
+void HeroController::connectDB() {
+    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+    db.setHostName("127.0.0.1");
+    db.setDatabaseName("overwatch_counter_guide");
+    db.setUserName("rwollack");
+    db.setPassword("abc123");
+    dbConnected = db.open();
+
+    if(!dbConnected) {
+        qDebug() << "Failed to connect to database.";
+    }
 }
 
 //get all heroes from the database
 void HeroController::fetchHeroes(std::vector<Hero> &heroCol) {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setHostName("127.0.0.1");
-    db.setDatabaseName("overwatch_counter_guide");
-    db.setUserName("root");
-    db.setPassword("");
-    bool dbOpen = db.open();
-
-    if(dbOpen) {
+    if(dbConnected) {
         QSqlQuery qGetHeroes;
         qGetHeroes.exec("SELECT * FROM Heroes");
 
         while(qGetHeroes.next()) {
             int id = qGetHeroes.value(0).toInt();
             QString name = qGetHeroes.value(1).toString();
-            Hero hero(id, name);
+            Role role;
+            getRoleById(qGetHeroes.value(2).toInt(), role);
+            Hero hero(id, name, role);
             heroCol.push_back(hero);
         }
     } else {
-        qDebug() << "Database failed to open.";
+        qDebug() << "Could not fetch heroes. Bad DB connection";
+    }
+}
+
+void HeroController::fetchRoles(std::vector<Role> &roles) {
+    if(dbConnected) {
+        QSqlQuery qGetRoles;
+        qGetRoles.exec("SELECT * FROM Roles");
+
+        while(qGetRoles.next()) {
+            int id = qGetRoles.value(0).toInt();
+            QString name = qGetRoles.value(1).toString();
+            Role role(id, name);
+            roles.push_back(role);
+        }
+    } else {
+        qDebug() << "Could not fetch roles. Bad DB connection";
     }
 }
 
@@ -50,6 +76,18 @@ void HeroController::getHeroById(int id, Hero &h) {
 
     if(it != heroes.end()) {
         h = *it;
+    }
+}
+
+void HeroController::getRoleById(int id, Role &r) {
+    auto it = std::find_if(roles.begin(),
+                           roles.end(),
+                           [id](Role &r) {
+            return r.getId() == id;
+    });
+
+    if(it != roles.end()) {
+        r = *it;
     }
 }
 

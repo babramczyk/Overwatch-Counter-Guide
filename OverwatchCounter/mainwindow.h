@@ -1,8 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QApplication>
 #include <QMainWindow>
 #include <QKeyEvent>
+#include "ui_mainwindow.h"
 #include "herocontroller.h"
 
 const int TEAM_SIZE = 6;
@@ -30,6 +32,9 @@ private slots:
 
     void on_clearResultsBtn_clicked();
     void reset();
+
+    void onHeroListDoubleClicked(QListWidgetItem* item);
+    void onEnemyListDoubleClicked(QListWidgetItem* item);
 
 private:
     Ui::MainWindow *ui;

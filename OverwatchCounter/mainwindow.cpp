@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 #include "hero.h"
 #include <QMainWindow>
-#include <QApplication>
 #include <QDebug>
 
 QColor *gc = new QColor(0, 255, 0);
@@ -40,13 +39,25 @@ MainWindow::MainWindow(QWidget *parent) :
 
     hc = new HeroController();
 
+    //set up double click events
+    connect(ui->heroList, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
+                this, SLOT(onHeroListDoubleClicked(QListWidgetItem*)));
+
+    connect(ui->currentTeam, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
+                this, SLOT(onEnemyListDoubleClicked(QListWidgetItem*)));
+
     //populate list of all heroes
     std::vector<Hero>* heroes = hc->getHeroes();
     for(std::vector<Hero>::iterator it = heroes->begin(); it < heroes->end(); ++it) {
         QListWidgetItem* item = new QListWidgetItem(QIcon(":/icons/" + QString::number(it->getId()) + ".png"), it->getName());
-        item->setTextColor(Qt::white);
+        QPixmap pix(":/icons/" + it->getRole().getName().toLower() + ".png");
+        QLabel* label = new QLabel();
 
+        item->setTextColor(Qt::white);
         ui->heroList->addItem(item);
+        label->setPixmap(pix);
+        label->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
+        ui->heroList->setItemWidget(item, label);
     }
 
 }
@@ -54,6 +65,16 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+//double click event function for hero list
+void MainWindow::onHeroListDoubleClicked(QListWidgetItem* item) {
+    addCurrentHero();
+}
+
+//double click event function for enemy list
+void MainWindow::onEnemyListDoubleClicked(QListWidgetItem* item) {
+    removeCurrentHero();
 }
 
 //add button click event - adds a hero to the current team list
@@ -73,34 +94,46 @@ void MainWindow::on_clearResultsBtn_clicked(){
     reset();
 }
 
+//adds the selected hero(s) to the enemy team list
 void MainWindow::addCurrentHero() {
-    if (ui->currentTeam->count() == TEAM_SIZE) {
-        return;
+    QList<QListWidgetItem*> selectedHeroes = ui->heroList->selectedItems();
+
+    for(int i = 0; i < selectedHeroes.length(); i++) {
+        if (ui->currentTeam->count() == TEAM_SIZE) {
+            return;
+        }
+
+        QListWidgetItem* currentHero = selectedHeroes.at(i);
+        Hero newEnemy;
+
+        hc->getHeroByName(currentHero->text().toStdString(), newEnemy);
+        hc->addEnemy(newEnemy);
+        ui->currentTeam->addItem(new QListWidgetItem(currentHero->icon(), currentHero->text()));
     }
 
-    QListWidgetItem* currentHero = ui->heroList->currentItem();
-    Hero newEnemy;
-    hc->getHeroByName(currentHero->text().toStdString(), newEnemy);
-    hc->addEnemy(newEnemy);
-
-    ui->heroList->removeItemWidget(currentHero); // Currently doesn't work (?)
-    ui->currentTeam->addItem(new QListWidgetItem(currentHero->icon(), currentHero->text()));
-
+    ui->heroList->setFocus();
     populateCounters();
 }
 
+//removes the selected hero(s) from the enemy team list
 void MainWindow::removeCurrentHero() {
-    QListWidgetItem* currentHero = ui->currentTeam->currentItem();
-    if (currentHero == NULL) return;
+    QList<QListWidgetItem*> selectedItems = ui->currentTeam->selectedItems();
 
-    Hero removeEnemy;
-    hc->getHeroByName(currentHero->text().toStdString(), removeEnemy);
-    hc->removeEnemy(removeEnemy);
-    delete currentHero;
+    for(int i = 0; i < selectedItems.length(); i++) {
+        QListWidgetItem* currentHero = selectedItems.at(i);
+
+        if (currentHero == NULL) return;
+
+        Hero removeEnemy;
+        hc->getHeroByName(currentHero->text().toStdString(), removeEnemy);
+        hc->removeEnemy(removeEnemy);
+        delete currentHero;
+    }
 
     populateCounters();
 }
 
+//Populates the counters table with an icon, name and composite score for each counter
 void MainWindow::populateCounters()  {
     std::vector<Hero> counters;
     hc->getHeroScores(counters);
@@ -109,20 +142,25 @@ void MainWindow::populateCounters()  {
     ui->counterResultLabel->hide();
     ui->resultTableWidget->show();
     ui->resultTableWidget->setRowCount(counters.size());
-    ui->resultTableWidget->setColumnCount(3);
+    ui->resultTableWidget->setColumnCount(4);
     ui->resultTableWidget->setColumnWidth(0, 100);
 
     for(std::vector<Hero>::iterator it = counters.begin(); it < counters.end(); ++it) {
-        QTableWidgetItem* item = new QTableWidgetItem();
-        QIcon icon(":/icons/" + QString::number(it->getId()) + ".png");
-        item->setIcon(icon);
+        QTableWidgetItem* avatarItem = new QTableWidgetItem();
+        QTableWidgetItem* roleItem = new QTableWidgetItem();
+        QIcon avatarIcon(":/icons/" + QString::number(it->getId()) + ".png");
+        QIcon roleIcon(":/icons/" + it->getRole().getName().toLower() + ".png");
+
+        avatarItem->setIcon(avatarIcon);
+        roleItem->setIcon(roleIcon);
         int score = it->getScore();
 
         ui->resultTableWidget->setRowHeight(counter, 50);
-        ui->resultTableWidget->setItem(counter, 0, item);
+        ui->resultTableWidget->setItem(counter, 0, avatarItem);
         ui->resultTableWidget->setItem(counter, 1, new QTableWidgetItem(it->getName()));
         QTableWidgetItem* scoreCell = generateColoredScoreCell(score);
         ui->resultTableWidget->setItem(counter, 2, scoreCell);
+        ui->resultTableWidget->setItem(counter, 3, roleItem);
         ui->resultTableWidget->setFocusPolicy(Qt::NoFocus);
 
         counter++;
@@ -136,6 +174,7 @@ void MainWindow::populateCounters()  {
     }
 }
 
+//clears the enemy list
 void MainWindow::reset() {
     ui->currentTeam->clear();
     ui->resultTableWidget->clear();
@@ -149,8 +188,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
         if (obj == ui->heroList) {
-            if (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return
-                    || keyEvent->key() == Qt::Key_Control) {
+            if (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
                 addCurrentHero();
             } else if (keyEvent->key() == Qt::Key_Delete || keyEvent->key() == Qt::Key_Backspace) {
 
