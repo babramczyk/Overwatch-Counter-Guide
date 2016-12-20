@@ -1,3 +1,15 @@
+///////////////////////////////////////////////////////////////////////////////
+// File Name:      hero.cpp
+//
+// Author0:        Richard Wollack
+// CS email:       wollack@cs.wisc.edu
+//
+// Author1:        Brett Abramczyk
+// CS email:       babramczyk@wisc.edu
+//
+// Description:    Hero class implementation
+///////////////////////////////////////////////////////////////////////////////
+
 #include <vector>
 #include "hero.h"
 #include <QtSql>

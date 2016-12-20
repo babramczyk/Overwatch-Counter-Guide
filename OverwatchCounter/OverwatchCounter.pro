@@ -32,7 +32,7 @@ FORMS    += mainwindow.ui
 RESOURCES += \
     icons.qrc
 
-DEFINES += MYSQL_USER=\\\"username\\\"
-DEFINES += MYSQL_PASS=\\\"password\\\"
+DEFINES += MYSQL_USER=\\\"rwollack\\\"
+DEFINES += MYSQL_PASS=\\\"abc123\\\"
 DEFINES += MYSQL_HOST=\\\"127.0.0.1\\\"
 DEFINES += MYSQL_DB=\\\"overwatch_counter_guide\\\"

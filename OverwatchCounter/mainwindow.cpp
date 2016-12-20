@@ -1,3 +1,15 @@
+///////////////////////////////////////////////////////////////////////////////
+// File Name:      mainwindow.cpp
+//
+// Author0:        Richard Wollack
+// CS email:       wollack@cs.wisc.edu
+//
+// Author1:        Brett Abramczyk
+// CS email:       babramczyk@wisc.edu
+//
+// Description:    MainWindow class implementation
+///////////////////////////////////////////////////////////////////////////////
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "hero.h"

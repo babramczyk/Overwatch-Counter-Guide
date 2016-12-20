@@ -1,3 +1,15 @@
+///////////////////////////////////////////////////////////////////////////////
+// File Name:      herocontroller.cpp
+//
+// Author0:        Richard Wollack
+// CS email:       wollack@cs.wisc.edu
+//
+// Author1:        Brett Abramczyk
+// CS email:       babramczyk@wisc.edu
+//
+// Description:    HeroController class implementation
+///////////////////////////////////////////////////////////////////////////////
+
 #include "herocontroller.h"
 #include <QtSql>
 #include <QtSqlVersion>
@@ -22,7 +34,6 @@ void HeroController::connectDB() {
     }
 }
 
-//get all heroes from the database
 void HeroController::fetchHeroes(std::vector<Hero> &heroCol) {
     if(dbConnected) {
         QSqlQuery qGetHeroes;
@@ -57,26 +68,12 @@ void HeroController::fetchRoles(std::vector<Role> &roles) {
     }
 }
 
-//getter for hero list
 std::vector<Hero>* HeroController::getHeroes() {
     if(heroes.size() < 1) {
         fetchHeroes(heroes);
     }
 
     return &heroes;
-}
-
-//get a hero from the vector of heroes by id
-void HeroController::getHeroById(int id, Hero &h) {
-    auto it = std::find_if(heroes.begin(),
-                      heroes.end(),
-                      [id](Hero &h) {
-            return h.getId() == id;
-    });
-
-    if(it != heroes.end()) {
-        h = *it;
-    }
 }
 
 void HeroController::getRoleById(int id, Role &r) {
@@ -91,10 +88,6 @@ void HeroController::getRoleById(int id, Role &r) {
     }
 }
 
-/**
- * @brief Iterates over all heroes, and updates their 'score' field based on
- *        the current selected team.
- */
 void HeroController::calculateAllHeroScores() {
     std::vector<int> enemyIDs;
     for (auto it = enemies.begin(); it != enemies.end(); ++it) {
@@ -105,13 +98,6 @@ void HeroController::calculateAllHeroScores() {
     }
 }
 
-/**
- * @brief Will return a vector of heroes with newly populated fields for their
- *        scores with respect to the currently selected team. Only populates
- *        heroes with non-zero scores.
- *
- * @param heroesWithScores The vector to populate.
- */
 void HeroController::getHeroScores(std::vector<Hero> &heroesWithScores) {
     calculateAllHeroScores();
     for (auto it = heroes.begin();
