@@ -31,3 +31,8 @@ FORMS    += mainwindow.ui
 
 RESOURCES += \
     icons.qrc
+
+DEFINES += MYSQL_USER=\\\"username\\\"
+DEFINES += MYSQL_PASS=\\\"password\\\"
+DEFINES += MYSQL_HOST=\\\"127.0.0.1\\\"
+DEFINES += MYSQL_DB=\\\"overwatch_counter_guide\\\"

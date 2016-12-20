@@ -68,12 +68,12 @@ MainWindow::~MainWindow()
 }
 
 //double click event function for hero list
-void MainWindow::onHeroListDoubleClicked(QListWidgetItem* item) {
+void MainWindow::onHeroListDoubleClicked(QListWidgetItem*) {
     addCurrentHero();
 }
 
 //double click event function for enemy list
-void MainWindow::onEnemyListDoubleClicked(QListWidgetItem* item) {
+void MainWindow::onEnemyListDoubleClicked(QListWidgetItem*) {
     removeCurrentHero();
 }
 

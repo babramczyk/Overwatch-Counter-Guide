@@ -11,10 +11,10 @@ HeroController::HeroController() {
 
 void HeroController::connectDB() {
     QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setHostName("127.0.0.1");
-    db.setDatabaseName("overwatch_counter_guide");
-    db.setUserName("rwollack");
-    db.setPassword("abc123");
+    db.setHostName(QString(MYSQL_HOST));
+    db.setDatabaseName(QString(MYSQL_DB));
+    db.setUserName(QString(MYSQL_USER));
+    db.setPassword(QString(MYSQL_PASS));
     dbConnected = db.open();
 
     if(!dbConnected) {

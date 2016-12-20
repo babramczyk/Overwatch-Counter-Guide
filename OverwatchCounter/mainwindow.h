@@ -33,8 +33,8 @@ private slots:
     void on_clearResultsBtn_clicked();
     void reset();
 
-    void onHeroListDoubleClicked(QListWidgetItem* item);
-    void onEnemyListDoubleClicked(QListWidgetItem* item);
+    void onHeroListDoubleClicked(QListWidgetItem*);
+    void onEnemyListDoubleClicked(QListWidgetItem*);
 
 private:
     Ui::MainWindow *ui;
