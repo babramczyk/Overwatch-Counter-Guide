@@ -8,6 +8,7 @@ class Hero
 private:
     int id, score;
     QString name;
+    std::vector<int> iCounterIDs, countersMeIDs;
 public:
     Hero();
     Hero(int id, QString name);
@@ -16,6 +17,8 @@ public:
     int getId();
     void setId(int id);
     int getScore();
+    std::vector<int>& getICounterIDs();
+    std::vector<int>& getCountersMeIDs();
     void calculateScore(std::vector<int> enemyIDs);
 };
 

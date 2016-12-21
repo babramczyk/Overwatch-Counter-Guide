@@ -10,6 +10,7 @@ Hero::Hero(int id, QString name) {
     Hero::id = id;
     Hero::name = name;
     score = 0;
+
 }
 
 QString Hero::getName() {
@@ -32,6 +33,14 @@ int Hero::getScore() {
     return score;
 }
 
+std::vector<int>& Hero::getICounterIDs() {
+    return iCounterIDs;
+}
+
+std::vector<int>& Hero::getCountersMeIDs() {
+    return countersMeIDs;
+}
+
 void Hero::calculateScore(std::vector<int> enemyIDs) {
     score = 0; // Reset score
 
@@ -41,7 +50,7 @@ void Hero::calculateScore(std::vector<int> enemyIDs) {
                             QString::number(id));
     while (qCalcScore.next()) {
         int currID = qCalcScore.value(2).value<int>();
-
+        iCounterIDs.push_back(currID);
         // Adds 1 to score for every enemy ID that matches the current row
         // saying that 'this' hero wins a 'counter battle'
         score += std::count(enemyIDs.begin(), enemyIDs.end(), currID);
@@ -53,6 +62,7 @@ void Hero::calculateScore(std::vector<int> enemyIDs) {
                             QString::number(id));
     while (qCalcScore.next()) {
         int currID = qCalcScore.value(1).value<int>();
+        countersMeIDs.push_back(currID);
         score -= std::count(enemyIDs.begin(), enemyIDs.end(), currID);
     }
 }

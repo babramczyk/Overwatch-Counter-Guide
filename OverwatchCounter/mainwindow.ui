@@ -230,6 +230,9 @@ QListWidget::item:selected {
     <property name="showGrid">
      <bool>false</bool>
     </property>
+    <property name="columnCount">
+     <number>9</number>
+    </property>
     <attribute name="horizontalHeaderVisible">
      <bool>false</bool>
     </attribute>
@@ -242,6 +245,15 @@ QListWidget::item:selected {
     <attribute name="verticalHeaderHighlightSections">
      <bool>false</bool>
     </attribute>
+    <column/>
+    <column/>
+    <column/>
+    <column/>
+    <column/>
+    <column/>
+    <column/>
+    <column/>
+    <column/>
    </widget>
    <widget class="QLabel" name="emptyTeamLabel">
     <property name="geometry">

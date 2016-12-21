@@ -15,6 +15,7 @@ public:
     void fetchHeroes(std::vector<Hero> &heroCol);
     Hero* getHero(int id);
     std::vector<Hero>* getHeroes();
+    void getEnemyIDs(std::vector<int> &enemyIDs);
     void getHeroById(int id, Hero &h);
     void getHeroByName(std::string name, Hero &h);
     void getHeroScores(std::vector<Hero> &heroesWithScores);

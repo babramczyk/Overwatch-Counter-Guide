@@ -40,6 +40,12 @@ std::vector<Hero>* HeroController::getHeroes() {
     return &heroes;
 }
 
+void HeroController::getEnemyIDs(std::vector<int> &enemyIDs) {
+    std::for_each(enemies.begin(), enemies.end(), [&enemyIDs](Hero& curr) {
+        enemyIDs.push_back(curr.getId());
+    });
+}
+
 //get a hero from the vector of heroes by id
 void HeroController::getHeroById(int id, Hero &h) {
     auto it = std::find_if(heroes.begin(),

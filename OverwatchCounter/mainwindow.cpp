@@ -5,11 +5,6 @@
 #include <QApplication>
 #include <QDebug>
 
-QColor *gc = new QColor(0, 255, 0);
-QColor *rc = new QColor(255, 0, 0);
-QBrush *green = new QBrush(*gc);
-QBrush *red = new QBrush(*rc);
-
 QTableWidgetItem* generateColoredScoreCell(int score) {
     QString scoreStr;
     if (score > 0) {
@@ -103,16 +98,17 @@ void MainWindow::removeCurrentHero() {
 
 void MainWindow::populateCounters()  {
     std::vector<Hero> counters;
+    std::vector<int> enemyIDs;
     hc->getHeroScores(counters);
+    hc->getEnemyIDs(enemyIDs);
     int counter = 0;
 
     ui->counterResultLabel->hide();
     ui->resultTableWidget->show();
     ui->resultTableWidget->setRowCount(counters.size());
-    ui->resultTableWidget->setColumnCount(3);
     ui->resultTableWidget->setColumnWidth(0, 100);
 
-    for(std::vector<Hero>::iterator it = counters.begin(); it < counters.end(); ++it) {
+    for (std::vector<Hero>::iterator it = counters.begin(); it < counters.end(); ++it) {
         QTableWidgetItem* item = new QTableWidgetItem();
         QIcon icon(":/icons/" + QString::number(it->getId()) + ".png");
         item->setIcon(icon);
@@ -123,6 +119,18 @@ void MainWindow::populateCounters()  {
         ui->resultTableWidget->setItem(counter, 1, new QTableWidgetItem(it->getName()));
         QTableWidgetItem* scoreCell = generateColoredScoreCell(score);
         ui->resultTableWidget->setItem(counter, 2, scoreCell);
+        for (auto itr = it->getICounterIDs().begin(); itr != it->getICounterIDs().end(); itr++) {
+            int col = 3;
+            for (auto enemy = enemyIDs.begin(); enemy != enemyIDs.end(); enemy++) {
+                if (*itr == *enemy) {
+                    qDebug() << it->getName() << ": " << QString::number(*enemy);
+                    QTableWidgetItem* item = new QTableWidgetItem();
+                    QIcon icon(":/icons/" + QString::number(*enemy) + ".png");
+                    item->setIcon(icon);
+                    ui->resultTableWidget->setItem(counter, col++, item);
+                }
+            }
+        }
         ui->resultTableWidget->setFocusPolicy(Qt::NoFocus);
 
         counter++;
