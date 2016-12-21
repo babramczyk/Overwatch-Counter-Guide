@@ -188,26 +188,19 @@ void MainWindow::populateCounters()  {
                     QIcon icon(":/icons/" + QString::number(*enemy) + ".png");
                     item->setIcon(icon);
                     item->setBackground(QColor(63, 255, 83, 100));
-                    if (row == 13 && col == 5) {
-                        qDebug() << "Adding: " << it->getName() << " counters " << *enemy;
-                    }
                     ui->resultTableWidget->setItem(row, col++, item);
                 }
             }
         }
 
-        qDebug() << it->getName() << ": " << it->getCountersMeIDs();
         for (auto itr = it->getCountersMeIDs().begin(); itr != it->getCountersMeIDs().end(); itr++) {
             for (auto enemy = enemyIDs.begin(); enemy != enemyIDs.end(); enemy++) {
                 if (*itr == *enemy) {
-                    qDebug() << it->getName() << ": " << *enemy << "; col = " << col << "; " << *itr;
+//                    qDebug() << it->getName() << ": " << *enemy << "; col = " << col << "; " << *itr;
                     QTableWidgetItem* item = new QTableWidgetItem();
                     QIcon icon(":/icons/" + QString::number(*enemy) + ".png");
                     item->setIcon(icon);
                     item->setBackground(QColor(255, 84, 63, 100));
-                    if (row == 13 && col == 5) {
-                        qDebug() << "Adding: " << it->getName() << " countered by  " << *enemy;
-                    }
                     ui->resultTableWidget->setItem(row, col++, item);
                 }
             }
