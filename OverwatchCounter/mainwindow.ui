@@ -13,8 +13,11 @@
   <property name="windowTitle">
    <string>Overwatch Counter Guide</string>
   </property>
+  <property name="windowOpacity">
+   <double>0.990000000000000</double>
+  </property>
   <property name="autoFillBackground">
-   <bool>false</bool>
+   <bool>true</bool>
   </property>
   <property name="styleSheet">
    <string notr="true">QMainWindow {
