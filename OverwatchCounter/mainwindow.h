@@ -86,6 +86,13 @@ private slots:
      */
     void onEnemyListDoubleClicked(QListWidgetItem*);
 
+    /**
+     * @brief Clears all the cells from last results table.
+     *
+     * @param rows - Number of rows in the table
+     */
+    void clearResultsIcons(int rows);
+
 private:
     Ui::MainWindow *ui;
     HeroController *hc;

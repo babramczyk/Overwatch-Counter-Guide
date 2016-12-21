@@ -23,10 +23,6 @@ HeroController::HeroController() {
 
 void HeroController::connectDB() {
     QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-    qDebug() << QString(MYSQL_HOST);
-    qDebug() << QString(MYSQL_DB);
-    qDebug() << QString(MYSQL_USER);
-    qDebug() << QString(MYSQL_PASS);
     db.setHostName(QString(MYSQL_HOST));
     db.setDatabaseName(QString(MYSQL_DB));
     db.setUserName(QString(MYSQL_USER));

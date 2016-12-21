@@ -161,6 +161,7 @@ void MainWindow::populateCounters()  {
     ui->resultTableWidget->setColumnWidth(7, 60);
     ui->resultTableWidget->setColumnWidth(8, 60);
     ui->resultTableWidget->setColumnWidth(9, 60);
+    clearResultsIcons(counters.size());
 
     for (std::vector<Hero>::iterator it = counters.begin(); it < counters.end(); ++it) {
         QTableWidgetItem* avatarItem = new QTableWidgetItem();
@@ -187,19 +188,26 @@ void MainWindow::populateCounters()  {
                     QIcon icon(":/icons/" + QString::number(*enemy) + ".png");
                     item->setIcon(icon);
                     item->setBackground(QColor(63, 255, 83, 100));
+                    if (row == 13 && col == 5) {
+                        qDebug() << "Adding: " << it->getName() << " counters " << *enemy;
+                    }
                     ui->resultTableWidget->setItem(row, col++, item);
                 }
             }
         }
 
+        qDebug() << it->getName() << ": " << it->getCountersMeIDs();
         for (auto itr = it->getCountersMeIDs().begin(); itr != it->getCountersMeIDs().end(); itr++) {
             for (auto enemy = enemyIDs.begin(); enemy != enemyIDs.end(); enemy++) {
                 if (*itr == *enemy) {
-//                    qDebug() << it->getName() << ": " << *enemy << "; col = " << col << "; " << *itr;
+                    qDebug() << it->getName() << ": " << *enemy << "; col = " << col << "; " << *itr;
                     QTableWidgetItem* item = new QTableWidgetItem();
                     QIcon icon(":/icons/" + QString::number(*enemy) + ".png");
                     item->setIcon(icon);
                     item->setBackground(QColor(255, 84, 63, 100));
+                    if (row == 13 && col == 5) {
+                        qDebug() << "Adding: " << it->getName() << " countered by  " << *enemy;
+                    }
                     ui->resultTableWidget->setItem(row, col++, item);
                 }
             }
@@ -215,6 +223,13 @@ void MainWindow::populateCounters()  {
     }
     if (ui->currentTeam->count() > 0) {
         ui->emptyTeamLabel->hide();
+    }
+}
+
+void MainWindow::clearResultsIcons(int rows) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 4; j < 10; j++)
+        ui->resultTableWidget->setItem(i, j, NULL);
     }
 }
 
