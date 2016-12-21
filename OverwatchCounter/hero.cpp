@@ -1,3 +1,15 @@
+///////////////////////////////////////////////////////////////////////////////
+// File Name:      hero.cpp
+//
+// Author0:        Richard Wollack
+// CS email:       wollack@cs.wisc.edu
+//
+// Author1:        Brett Abramczyk
+// CS email:       babramczyk@wisc.edu
+//
+// Description:    Hero class implementation
+///////////////////////////////////////////////////////////////////////////////
+
 #include <vector>
 #include "hero.h"
 #include <QtSql>
@@ -6,9 +18,10 @@
 
 Hero::Hero() {}
 
-Hero::Hero(int id, QString name) {
+Hero::Hero(int id, QString name, Role role) {
     Hero::id = id;
     Hero::name = name;
+    Hero::role = role;
     score = 0;
 
 }
@@ -65,4 +78,12 @@ void Hero::calculateScore(std::vector<int> enemyIDs) {
         countersMeIDs.push_back(currID);
         score -= std::count(enemyIDs.begin(), enemyIDs.end(), currID);
     }
+}
+
+Role Hero::getRole() {
+    return role;
+}
+
+void Hero::setRole(Role role) {
+    this->role = role;
 }

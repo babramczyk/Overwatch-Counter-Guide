@@ -1,37 +1,77 @@
+///////////////////////////////////////////////////////////////////////////////
+// File Name:      herocontroller.cpp
+//
+// Author0:        Richard Wollack
+// CS email:       wollack@cs.wisc.edu
+//
+// Author1:        Brett Abramczyk
+// CS email:       babramczyk@wisc.edu
+//
+// Description:    HeroController class implementation
+///////////////////////////////////////////////////////////////////////////////
+
 #include "herocontroller.h"
 #include <QtSql>
 #include <QtSqlVersion>
 #include <vector>
 
 HeroController::HeroController() {
+    connectDB();
+    fetchRoles(roles);
     fetchHeroes(heroes);
 }
 
-//get all heroes from the database
-void HeroController::fetchHeroes(std::vector<Hero> &heroCol) {
+void HeroController::connectDB() {
     QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setHostName("127.0.0.1");
-    db.setDatabaseName("overwatch_counter_guide");
-    db.setUserName("root");
-    db.setPassword("");
-    bool dbOpen = db.open();
+    qDebug() << QString(MYSQL_HOST);
+    qDebug() << QString(MYSQL_DB);
+    qDebug() << QString(MYSQL_USER);
+    qDebug() << QString(MYSQL_PASS);
+    db.setHostName(QString(MYSQL_HOST));
+    db.setDatabaseName(QString(MYSQL_DB));
+    db.setUserName(QString(MYSQL_USER));
+    db.setPassword(QString(MYSQL_PASS));
+    dbConnected = db.open();
 
-    if(dbOpen) {
+    if(!dbConnected) {
+        qDebug() << "Failed to connect to database.";
+    }
+}
+
+void HeroController::fetchHeroes(std::vector<Hero> &heroCol) {
+    if(dbConnected) {
         QSqlQuery qGetHeroes;
         qGetHeroes.exec("SELECT * FROM Heroes");
 
         while(qGetHeroes.next()) {
             int id = qGetHeroes.value(0).toInt();
             QString name = qGetHeroes.value(1).toString();
-            Hero hero(id, name);
+            Role role;
+            getRoleById(qGetHeroes.value(2).toInt(), role);
+            Hero hero(id, name, role);
             heroCol.push_back(hero);
         }
     } else {
-        qDebug() << "Database failed to open.";
+        qDebug() << "Could not fetch heroes. Bad DB connection";
     }
 }
 
-//getter for hero list
+void HeroController::fetchRoles(std::vector<Role> &roles) {
+    if(dbConnected) {
+        QSqlQuery qGetRoles;
+        qGetRoles.exec("SELECT * FROM Roles");
+
+        while(qGetRoles.next()) {
+            int id = qGetRoles.value(0).toInt();
+            QString name = qGetRoles.value(1).toString();
+            Role role(id, name);
+            roles.push_back(role);
+        }
+    } else {
+        qDebug() << "Could not fetch roles. Bad DB connection";
+    }
+}
+
 std::vector<Hero>* HeroController::getHeroes() {
     if(heroes.size() < 1) {
         fetchHeroes(heroes);
@@ -46,7 +86,6 @@ void HeroController::getEnemyIDs(std::vector<int> &enemyIDs) {
     });
 }
 
-//get a hero from the vector of heroes by id
 void HeroController::getHeroById(int id, Hero &h) {
     auto it = std::find_if(heroes.begin(),
                       heroes.end(),
@@ -59,10 +98,18 @@ void HeroController::getHeroById(int id, Hero &h) {
     }
 }
 
-/**
- * @brief Iterates over all heroes, and updates their 'score' field based on
- *        the current selected team.
- */
+void HeroController::getRoleById(int id, Role &r) {
+    auto it = std::find_if(roles.begin(),
+                           roles.end(),
+                           [id](Role &r) {
+            return r.getId() == id;
+    });
+
+    if(it != roles.end()) {
+        r = *it;
+    }
+}
+
 void HeroController::calculateAllHeroScores() {
     std::vector<int> enemyIDs;
     for (auto it = enemies.begin(); it != enemies.end(); ++it) {
@@ -73,13 +120,6 @@ void HeroController::calculateAllHeroScores() {
     }
 }
 
-/**
- * @brief Will return a vector of heroes with newly populated fields for their
- *        scores with respect to the currently selected team. Only populates
- *        heroes with non-zero scores.
- *
- * @param heroesWithScores The vector to populate.
- */
 void HeroController::getHeroScores(std::vector<Hero> &heroesWithScores) {
     calculateAllHeroScores();
     for (auto it = heroes.begin();
