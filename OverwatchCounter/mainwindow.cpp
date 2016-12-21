@@ -105,7 +105,7 @@ void MainWindow::on_clearResultsBtn_clicked(){
 void MainWindow::addCurrentHero() {
     QList<QListWidgetItem*> selectedHeroes = ui->heroList->selectedItems();
 
-    for(int i = 0; i < selectedHeroes.length(); i++) {
+    for (int i = 0; i < selectedHeroes.length(); i++) {
         if (ui->currentTeam->count() == TEAM_SIZE) {
             return;
         }
@@ -169,10 +169,23 @@ void MainWindow::populateCounters()  {
         QTableWidgetItem* scoreCell = generateColoredScoreCell(score);
         ui->resultTableWidget->setItem(row, 3, scoreCell);
         int col = 4;
-        for (auto itr = it->getICounterIDs().begin(); itr != it->getICounterIDs().end(); itr++) {
-            for (auto enemy = enemyIDs.begin(); enemy != enemyIDs.end(); enemy++) {
+
+        for (auto enemy = enemyIDs.begin(); enemy != enemyIDs.end(); enemy++) {
+//            for (auto itr = it->getICounterIDs().begin(); itr != it->getICounterIDs().end(); itr++) {
+
+//                if (*itr == *enemy) {
+////                    qDebug() << it->getName() << ": " << *enemy << "; col = " << col << "; " << *itr;
+//                    QTableWidgetItem* item = new QTableWidgetItem();
+//                    QIcon icon(":/icons/" + QString::number(*enemy) + ".png");
+//                    item->setIcon(icon);
+//                    ui->resultTableWidget->setItem(row, col++, item);
+//                }
+//            }
+
+            for (auto itr = it->getCountersMeIDs().begin(); itr != it->getCountersMeIDs().end(); itr++) {
+
                 if (*itr == *enemy) {
-                    qDebug() << it->getName() << ": " << *enemy << "; col = " << col << "; " << *itr;
+//                    qDebug() << it->getName() << ": " << *enemy << "; col = " << col << "; " << *itr;
                     QTableWidgetItem* item = new QTableWidgetItem();
                     QIcon icon(":/icons/" + QString::number(*enemy) + ".png");
                     item->setIcon(icon);

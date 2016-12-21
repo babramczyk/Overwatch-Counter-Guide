@@ -73,8 +73,8 @@ public:
      * @return the hero score
      */
     int getScore();
-    std::vector<int>& getICounterIDs();
-    std::vector<int>& getCountersMeIDs();
+    const std::vector<int>& getICounterIDs();
+    const std::vector<int>& getCountersMeIDs();
 
     /**
      * @brief Calculates the composite score for a hero by querying

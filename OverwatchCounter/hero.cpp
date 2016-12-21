@@ -46,16 +46,18 @@ int Hero::getScore() {
     return score;
 }
 
-std::vector<int>& Hero::getICounterIDs() {
+const std::vector<int>& Hero::getICounterIDs() {
     return iCounterIDs;
 }
 
-std::vector<int>& Hero::getCountersMeIDs() {
+const std::vector<int>& Hero::getCountersMeIDs() {
     return countersMeIDs;
 }
 
 void Hero::calculateScore(std::vector<int> enemyIDs) {
     score = 0; // Reset score
+    iCounterIDs.clear();
+    countersMeIDs.clear();
 
     // Counts heroes that this one counters, and adds it to composite score
     QSqlQuery qCalcScore;
