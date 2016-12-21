@@ -151,7 +151,16 @@ void MainWindow::populateCounters()  {
     ui->counterResultLabel->hide();
     ui->resultTableWidget->show();
     ui->resultTableWidget->setRowCount(counters.size());
-    ui->resultTableWidget->setColumnWidth(0, 100);
+    ui->resultTableWidget->setColumnWidth(0, 35);
+    ui->resultTableWidget->setColumnWidth(1, 80);
+    ui->resultTableWidget->setColumnWidth(2, 100);
+    ui->resultTableWidget->setColumnWidth(3, 60);
+    ui->resultTableWidget->setColumnWidth(4, 60);
+    ui->resultTableWidget->setColumnWidth(5, 60);
+    ui->resultTableWidget->setColumnWidth(6, 60);
+    ui->resultTableWidget->setColumnWidth(7, 60);
+    ui->resultTableWidget->setColumnWidth(8, 60);
+    ui->resultTableWidget->setColumnWidth(9, 60);
 
     for (std::vector<Hero>::iterator it = counters.begin(); it < counters.end(); ++it) {
         QTableWidgetItem* avatarItem = new QTableWidgetItem();
@@ -170,31 +179,33 @@ void MainWindow::populateCounters()  {
         ui->resultTableWidget->setItem(row, 3, scoreCell);
         int col = 4;
 
-        for (auto enemy = enemyIDs.begin(); enemy != enemyIDs.end(); enemy++) {
-//            for (auto itr = it->getICounterIDs().begin(); itr != it->getICounterIDs().end(); itr++) {
-
-//                if (*itr == *enemy) {
-////                    qDebug() << it->getName() << ": " << *enemy << "; col = " << col << "; " << *itr;
-//                    QTableWidgetItem* item = new QTableWidgetItem();
-//                    QIcon icon(":/icons/" + QString::number(*enemy) + ".png");
-//                    item->setIcon(icon);
-//                    ui->resultTableWidget->setItem(row, col++, item);
-//                }
-//            }
-
-            for (auto itr = it->getCountersMeIDs().begin(); itr != it->getCountersMeIDs().end(); itr++) {
-
+        for (auto itr = it->getICounterIDs().begin(); itr != it->getICounterIDs().end(); itr++) {
+            for (auto enemy = enemyIDs.begin(); enemy != enemyIDs.end(); enemy++) {
                 if (*itr == *enemy) {
 //                    qDebug() << it->getName() << ": " << *enemy << "; col = " << col << "; " << *itr;
                     QTableWidgetItem* item = new QTableWidgetItem();
                     QIcon icon(":/icons/" + QString::number(*enemy) + ".png");
                     item->setIcon(icon);
+                    item->setBackground(QColor(63, 255, 83, 100));
                     ui->resultTableWidget->setItem(row, col++, item);
                 }
             }
         }
 
-        ui->resultTableWidget->setFocusPolicy(Qt::NoFocus);
+        for (auto itr = it->getCountersMeIDs().begin(); itr != it->getCountersMeIDs().end(); itr++) {
+            for (auto enemy = enemyIDs.begin(); enemy != enemyIDs.end(); enemy++) {
+                if (*itr == *enemy) {
+//                    qDebug() << it->getName() << ": " << *enemy << "; col = " << col << "; " << *itr;
+                    QTableWidgetItem* item = new QTableWidgetItem();
+                    QIcon icon(":/icons/" + QString::number(*enemy) + ".png");
+                    item->setIcon(icon);
+                    item->setBackground(QColor(255, 84, 63, 100));
+                    ui->resultTableWidget->setItem(row, col++, item);
+                }
+            }
+        }
+
+//        ui->resultTableWidget->setFocusPolicy(Qt::NoFocus);
 
         row++;
     }

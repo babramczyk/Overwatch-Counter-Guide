@@ -30,7 +30,7 @@
      <rect>
       <x>50</x>
       <y>50</y>
-      <width>311</width>
+      <width>251</width>
       <height>521</height>
      </rect>
     </property>
@@ -71,7 +71,7 @@ QListWidget::item:selected {
    <widget class="QPushButton" name="addHeroBtn">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>100</x>
       <y>580</y>
       <width>151</width>
       <height>51</height>
@@ -146,7 +146,7 @@ QListWidget::item:selected {
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>100</x>
       <y>30</y>
       <width>151</width>
       <height>16</height>
@@ -211,9 +211,9 @@ QListWidget::item:selected {
     </property>
     <property name="geometry">
      <rect>
-      <x>380</x>
+      <x>330</x>
       <y>230</y>
-      <width>541</width>
+      <width>651</width>
       <height>401</height>
      </rect>
     </property>
@@ -305,7 +305,7 @@ QListWidget::item:selected {
    <widget class="QLabel" name="counterResultLabel">
     <property name="geometry">
      <rect>
-      <x>610</x>
+      <x>620</x>
       <y>410</y>
       <width>81</width>
       <height>51</height>
